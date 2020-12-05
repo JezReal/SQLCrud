@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 
@@ -18,8 +12,7 @@ namespace SQLCrud
         int StudentID = 0;
 
         private bool isOperationUpdate;
-        private MySqlConnection mySqlConnection;
-
+        
         public Form1()
         {
             InitializeComponent();
@@ -39,6 +32,7 @@ namespace SQLCrud
                 mySqlCmd.Parameters.AddWithValue("_StudentAddress", txtAddress.Text.Trim());
                 mySqlCmd.Parameters.AddWithValue("_Description", txtDescription.Text.Trim());
                 mySqlCmd.ExecuteNonQuery();
+
                 if (isOperationUpdate)
                 {
                     MessageBox.Show("Student has been updated");
@@ -58,7 +52,7 @@ namespace SQLCrud
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            InitializeConnection();
+            TestConnection();
             Clear(); //CLEARS RECORD TO GIVE WAY FOR THE POPULATION OF FRESH RECORDS (GRIDFILL)
             GridFill(); //POPULATES THE DATA GRID VIEW OF RECORDS FROM OUR DATABASE
         }
@@ -142,22 +136,22 @@ namespace SQLCrud
             }
         }
 
-        private void InitializeConnection()
+        private void TestConnection()
         {
-            mySqlConnection = new MySqlConnection(connectionString);
-
-            try
+            using (MySqlConnection mySqlConnection = new MySqlConnection(connectionString))
             {
-                mySqlConnection.Open();
-            }
-            catch (MySqlException ignored)
-            {
-                MessageBox.Show("It seems the database is offline. Please turn it on then rerun the program.",
-                    "Database Offline");
+                try
+                {
+                    mySqlConnection.Open();
+                }
+                catch (MySqlException)
+                {
+                    MessageBox.Show("It seems the database is offline. Please turn it on then rerun the program.",
+                        "Database Offline");
 
-                //use environment.exit instead of application.exit() because at this point the Application.Run() has not been called yet
-                //reference: https://stackoverflow.com/questions/12977924/how-to-properly-exit-a-c-sharp-application
-                Environment.Exit(-1);
+                    //use environment.exit instead of application.exit() because at this point the Application.Run() has not been called yet
+                    Environment.Exit(-1);
+                }
             }
         }
     }
