@@ -16,8 +16,9 @@ namespace SQLCrud
         //DATABASE STRING SYNTAX, PASSWORD MAY BE LEFT EMPTY OR NOT CODED ENTIRELY
         string connectionString = @"Server=localhost;Database=studentdb;Uid=root;";
         int StudentID = 0;
-        
+
         private bool isOperationUpdate;
+        private MySqlConnection mySqlConnection;
 
         public Form1()
         {
@@ -55,9 +56,9 @@ namespace SQLCrud
         }
 
 
-        private void Form1_Load_1(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
         {
-            
+            InitializeConnection();
             Clear(); //CLEARS RECORD TO GIVE WAY FOR THE POPULATION OF FRESH RECORDS (GRIDFILL)
             GridFill(); //POPULATES THE DATA GRID VIEW OF RECORDS FROM OUR DATABASE
         }
@@ -141,6 +142,23 @@ namespace SQLCrud
             }
         }
 
-        
+        private void InitializeConnection()
+        {
+            mySqlConnection = new MySqlConnection(connectionString);
+
+            try
+            {
+                mySqlConnection.Open();
+            }
+            catch (MySqlException ignored)
+            {
+                MessageBox.Show("It seems the database is offline. Please turn it on then rerun the program.",
+                    "Database Offline");
+
+                //use environment.exit instead of application.exit() because at this point the Application.Run() has not been called yet
+                //reference: https://stackoverflow.com/questions/12977924/how-to-properly-exit-a-c-sharp-application
+                Environment.Exit(-1);
+            }
+        }
     }
 }
