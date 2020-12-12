@@ -55,7 +55,7 @@
             this.dgvStudent.RowHeadersWidth = 51;
             this.dgvStudent.Size = new System.Drawing.Size(584, 283);
             this.dgvStudent.TabIndex = 15;
-            this.dgvStudent.DoubleClick += new System.EventHandler(this.dgvStudent_DoubleClick);
+            this.dgvStudent.DoubleClick += new System.EventHandler(this.DgvStudent_DoubleClick);
             // 
             // btnCancel
             // 
@@ -69,7 +69,7 @@
             this.btnCancel.TabIndex = 11;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = false;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            this.btnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
             // btnDelete
             // 
@@ -83,7 +83,7 @@
             this.btnDelete.TabIndex = 12;
             this.btnDelete.Text = "Delete";
             this.btnDelete.UseVisualStyleBackColor = false;
-            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            this.btnDelete.Click += new System.EventHandler(this.BtnDelete_Click);
             // 
             // btnSearch
             // 
@@ -97,7 +97,7 @@
             this.btnSearch.TabIndex = 13;
             this.btnSearch.Text = "Search";
             this.btnSearch.UseVisualStyleBackColor = false;
-            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            this.btnSearch.Click += new System.EventHandler(this.BtnSearch_Click);
             // 
             // btnSave
             // 
