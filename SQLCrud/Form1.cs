@@ -101,17 +101,7 @@ namespace SQLCrud
         // AND TO SIMULATE ANOTHER READING OPERATION ON SQL (PLEASE REFER TO THE ROUTINE)
         private void BtnSearch_Click(object sender, EventArgs e)
         {
-            using (MySqlConnection mySqlConnection = new MySqlConnection(ConnectionString))
-            {
-                mySqlConnection.Open();
-                MySqlDataAdapter sqlDa = new MySqlDataAdapter("StudentSearchByValue", mySqlConnection);
-                sqlDa.SelectCommand.CommandType = CommandType.StoredProcedure;
-                sqlDa.SelectCommand.Parameters.AddWithValue("_SearchValue", txtSearch.Text);
-                DataTable dtblStudent = new DataTable();
-                sqlDa.Fill(dtblStudent);
-                dgvStudent.DataSource = dtblStudent;
-                dgvStudent.Columns[0].Visible = false;
-            }
+            DisplayItems();
         }
 
         //CLICKING THE CANCEL BUTTON TRIGGERS OUR CLEAR METHOD
@@ -152,6 +142,35 @@ namespace SQLCrud
                     //use environment.exit instead of application.exit() because at this point the Application.Run() has not been called yet
                     Environment.Exit(-1);
                 }
+            }
+        }
+
+        private void TxtSearch_TextChanged(object sender, EventArgs e)
+        {
+            // fill the table when the search box does not contain any text
+            // user no longer has to press the search button to fill the table
+            if (txtSearch.Text.Length == 0)
+            {
+                DisplayItems();
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        private void DisplayItems()
+        {
+            using (MySqlConnection mySqlConnection = new MySqlConnection(ConnectionString))
+            {
+                mySqlConnection.Open();
+                MySqlDataAdapter sqlDa = new MySqlDataAdapter("StudentSearchByValue", mySqlConnection);
+                sqlDa.SelectCommand.CommandType = CommandType.StoredProcedure;
+                sqlDa.SelectCommand.Parameters.AddWithValue("_SearchValue", txtSearch.Text);
+                DataTable dtblStudent = new DataTable();
+                sqlDa.Fill(dtblStudent);
+                dgvStudent.DataSource = dtblStudent;
+                dgvStudent.Columns[0].Visible = false;
             }
         }
     }
