@@ -8,10 +8,10 @@ namespace SQLCrud
     public partial class Form1 : Form
     {
         //DATABASE STRING SYNTAX, PASSWORD MAY BE LEFT EMPTY OR NOT CODED ENTIRELY
-        string connectionString = @"Server=localhost;Database=studentdb;Uid=root;";
-        int StudentID = 0;
+        private const string ConnectionString = @"Server=localhost;Database=studentdb;Uid=root;";
+        int _studentId = 0;
 
-        private bool isOperationUpdate;
+        private bool _isOperationUpdate;
         
         public Form1()
         {
@@ -22,18 +22,18 @@ namespace SQLCrud
         //ADDING OF RECORDS
         private void BtnSave_Click(object sender, EventArgs e)
         {
-            using (MySqlConnection mySqlConnection = new MySqlConnection(connectionString))
+            using (MySqlConnection mySqlConnection = new MySqlConnection(ConnectionString))
             {
                 mySqlConnection.Open();
                 MySqlCommand mySqlCmd = new MySqlCommand("StudentAddOrEdit", mySqlConnection);
                 mySqlCmd.CommandType = CommandType.StoredProcedure;
-                mySqlCmd.Parameters.AddWithValue("_StudentID", StudentID);
+                mySqlCmd.Parameters.AddWithValue("_StudentID", _studentId);
                 mySqlCmd.Parameters.AddWithValue("_StudentName", txtStudentName.Text.Trim());
                 mySqlCmd.Parameters.AddWithValue("_StudentAddress", txtAddress.Text.Trim());
                 mySqlCmd.Parameters.AddWithValue("_Description", txtDescription.Text.Trim());
                 mySqlCmd.ExecuteNonQuery();
 
-                if (isOperationUpdate)
+                if (_isOperationUpdate)
                 {
                     MessageBox.Show("Student has been updated");
                 }
@@ -42,7 +42,7 @@ namespace SQLCrud
                     MessageBox.Show("Student has been added");
                 }
 
-                isOperationUpdate = false;
+                _isOperationUpdate = false;
 
                 Clear();
                 GridFill();
@@ -61,7 +61,7 @@ namespace SQLCrud
         //POPULATING OF DATA GRID VIEW WITH DATABASE RECORDS
         void GridFill()
         {
-            using (MySqlConnection mySqlConnection = new MySqlConnection(connectionString))
+            using (MySqlConnection mySqlConnection = new MySqlConnection(ConnectionString))
             {
                 mySqlConnection.Open();
                 MySqlDataAdapter sqlDa = new MySqlDataAdapter("StudentViewAll", mySqlConnection);
@@ -77,7 +77,7 @@ namespace SQLCrud
         void Clear()
         {
             txtStudentName.Text = txtAddress.Text = txtDescription.Text = txtSearch.Text = "";
-            StudentID = 0;
+            _studentId = 0;
             btnSave.Text = "Save";
             btnDelete.Enabled = false;
         }
@@ -90,10 +90,10 @@ namespace SQLCrud
                 txtStudentName.Text = dgvStudent.CurrentRow.Cells[1].Value.ToString();
                 txtAddress.Text = dgvStudent.CurrentRow.Cells[2].Value.ToString();
                 txtDescription.Text = dgvStudent.CurrentRow.Cells[3].Value.ToString();
-                StudentID = Convert.ToInt32(dgvStudent.CurrentRow.Cells[0].Value.ToString());
+                _studentId = Convert.ToInt32(dgvStudent.CurrentRow.Cells[0].Value.ToString());
                 btnSave.Text = "Update";
                 btnDelete.Enabled = Enabled;
-                isOperationUpdate = true;
+                _isOperationUpdate = true;
             }
         }
 
@@ -101,18 +101,9 @@ namespace SQLCrud
         // AND TO SIMULATE ANOTHER READING OPERATION ON SQL (PLEASE REFER TO THE ROUTINE)
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            using (MySqlConnection mySqlConnection = new MySqlConnection(connectionString))
-            {
-                mySqlConnection.Open();
-                MySqlDataAdapter sqlDa = new MySqlDataAdapter("StudentSearchByValue", mySqlConnection);
-                sqlDa.SelectCommand.CommandType = CommandType.StoredProcedure;
-                sqlDa.SelectCommand.Parameters.AddWithValue("_SearchValue", txtSearch.Text);
-                DataTable dtblStudent = new DataTable();
-                sqlDa.Fill(dtblStudent);
-                dgvStudent.DataSource = dtblStudent;
-                dgvStudent.Columns[0].Visible = false;
-            }
+            DisplaySearchResults();
         }
+
 
         //CLICKING THE CANCEL BUTTON TRIGGERS OUR CLEAR METHOD
         private void btnCancel_Click(object sender, EventArgs e)
@@ -123,12 +114,12 @@ namespace SQLCrud
         //PLEASE REFER TO OUR ROUTINE, THIS DELETES THE RECORD CURRENTLY SELECTED
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            using (MySqlConnection mySqlConnection = new MySqlConnection(connectionString))
+            using (MySqlConnection mySqlConnection = new MySqlConnection(ConnectionString))
             {
                 mySqlConnection.Open();
                 MySqlCommand mySqlCmd = new MySqlCommand("StudentDeleteByID", mySqlConnection);
                 mySqlCmd.CommandType = CommandType.StoredProcedure;
-                mySqlCmd.Parameters.AddWithValue("_StudentID", StudentID);
+                mySqlCmd.Parameters.AddWithValue("_StudentID", _studentId);
                 mySqlCmd.ExecuteNonQuery();
                 MessageBox.Show("Deleted Successfully");
                 Clear();
@@ -138,7 +129,7 @@ namespace SQLCrud
 
         private void TestConnection()
         {
-            using (MySqlConnection mySqlConnection = new MySqlConnection(connectionString))
+            using (MySqlConnection mySqlConnection = new MySqlConnection(ConnectionString))
             {
                 try
                 {
@@ -152,6 +143,26 @@ namespace SQLCrud
                     //use environment.exit instead of application.exit() because at this point the Application.Run() has not been called yet
                     Environment.Exit(-1);
                 }
+            }
+        }
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            DisplaySearchResults();
+        }
+
+        private void DisplaySearchResults()
+        {
+            using (MySqlConnection mySqlConnection = new MySqlConnection(ConnectionString))
+            {
+                mySqlConnection.Open();
+                MySqlDataAdapter sqlDa = new MySqlDataAdapter("StudentSearchByValue", mySqlConnection);
+                sqlDa.SelectCommand.CommandType = CommandType.StoredProcedure;
+                sqlDa.SelectCommand.Parameters.AddWithValue("_SearchValue", txtSearch.Text);
+                DataTable dtblStudent = new DataTable();
+                sqlDa.Fill(dtblStudent);
+                dgvStudent.DataSource = dtblStudent;
+                dgvStudent.Columns[0].Visible = false;
             }
         }
     }
