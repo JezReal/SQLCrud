@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
@@ -12,6 +13,7 @@ namespace SQLCrud
         int _studentId = 0;
 
         private bool _isOperationUpdate;
+        private bool valid=true;
         
         public Form1()
         {
@@ -22,30 +24,44 @@ namespace SQLCrud
         //ADDING OF RECORDS
         private void BtnSave_Click(object sender, EventArgs e)
         {
-            using (MySqlConnection mySqlConnection = new MySqlConnection(ConnectionString))
+            if (fieldsIsValid()) {
+                using (MySqlConnection mySqlConnection = new MySqlConnection(ConnectionString))
+                {
+                    try
+                    {
+                        mySqlConnection.Open();
+                        MySqlCommand mySqlCmd = new MySqlCommand("StudentAddOrEdit", mySqlConnection);
+                        mySqlCmd.CommandType = CommandType.StoredProcedure;
+                        mySqlCmd.Parameters.AddWithValue("_StudentID", _studentId);
+                        mySqlCmd.Parameters.AddWithValue("_StudentName", txtStudentName.Text.Trim());
+                        mySqlCmd.Parameters.AddWithValue("_StudentAddress", txtAddress.Text.Trim());
+                        mySqlCmd.Parameters.AddWithValue("_Description", txtDescription.Text.Trim());
+                        mySqlCmd.ExecuteNonQuery();
+
+                        Clear();
+                        GridFill();
+
+                        if (_isOperationUpdate)
+                        {
+                            MessageBox.Show("Student has been updated");
+                        }
+                        else
+                        {
+                            MessageBox.Show("Student has been added");
+                        }
+
+                        _isOperationUpdate = false;
+
+                    }
+                    catch (Exception exception)
+                    {
+                        MessageBox.Show(exception.Message);
+                    }
+                }
+            }
+            else
             {
-                mySqlConnection.Open();
-                MySqlCommand mySqlCmd = new MySqlCommand("StudentAddOrEdit", mySqlConnection);
-                mySqlCmd.CommandType = CommandType.StoredProcedure;
-                mySqlCmd.Parameters.AddWithValue("_StudentID", _studentId);
-                mySqlCmd.Parameters.AddWithValue("_StudentName", txtStudentName.Text.Trim());
-                mySqlCmd.Parameters.AddWithValue("_StudentAddress", txtAddress.Text.Trim());
-                mySqlCmd.Parameters.AddWithValue("_Description", txtDescription.Text.Trim());
-                mySqlCmd.ExecuteNonQuery();
-
-                if (_isOperationUpdate)
-                {
-                    MessageBox.Show("Student has been updated");
-                }
-                else
-                {
-                    MessageBox.Show("Student has been added");
-                }
-
-                _isOperationUpdate = false;
-
-                Clear();
-                GridFill();
+                MessageBox.Show("Incomplete fields.");
             }
         }
 
@@ -115,14 +131,21 @@ namespace SQLCrud
         {
             using (MySqlConnection mySqlConnection = new MySqlConnection(ConnectionString))
             {
-                mySqlConnection.Open();
-                MySqlCommand mySqlCmd = new MySqlCommand("StudentDeleteByID", mySqlConnection);
-                mySqlCmd.CommandType = CommandType.StoredProcedure;
-                mySqlCmd.Parameters.AddWithValue("_StudentID", _studentId);
-                mySqlCmd.ExecuteNonQuery();
-                MessageBox.Show("Deleted Successfully");
-                Clear();
-                GridFill();
+                try
+                {
+                    mySqlConnection.Open();
+                    MySqlCommand mySqlCmd = new MySqlCommand("StudentDeleteByID", mySqlConnection);
+                    mySqlCmd.CommandType = CommandType.StoredProcedure;
+                    mySqlCmd.Parameters.AddWithValue("_StudentID", _studentId);
+                    mySqlCmd.ExecuteNonQuery();
+                    MessageBox.Show("Deleted Successfully");
+                    Clear();
+                    GridFill();
+
+                } catch(Exception sqlException) 
+                {
+                    MessageBox.Show(sqlException.Message);
+                } 
             }
         }
 
@@ -172,6 +195,29 @@ namespace SQLCrud
                 dgvStudent.DataSource = dtblStudent;
                 dgvStudent.Columns[0].Visible = false;
             }
+        }
+
+        private bool fieldsIsValid()
+        {
+            List<TextBox> fields = new List<TextBox>();
+            fields.Add(txtDescription);
+            fields.Add(txtAddress);
+            fields.Add(txtStudentName);
+
+            foreach (TextBox field in fields)
+            {
+                if (String.IsNullOrEmpty(field.Text))
+                {
+                    valid = false;
+                }
+            }
+                
+            return valid;
+        }
+
+        private void dgvStudent_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }
