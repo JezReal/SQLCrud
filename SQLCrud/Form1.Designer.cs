@@ -196,9 +196,9 @@ namespace SQLCrud
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(472, 402);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(286, 17);
+            this.label4.Size = new System.Drawing.Size(258, 17);
             this.label4.TabIndex = 16;
-            this.label4.Text = "Note: Double click a record you want to edit.";
+            this.label4.Text = "Note: Double click a record to update it.";
             this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // Form1
