@@ -20,6 +20,7 @@ namespace SQLCrud
             InitializeComponent();
         }
 
+
         //09-Nov-2019 BSIT 2A/2B
         //ADDING OF RECORDS
         private void BtnSave_Click(object sender, EventArgs e)
@@ -224,5 +225,16 @@ namespace SQLCrud
         {
 
         }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }
