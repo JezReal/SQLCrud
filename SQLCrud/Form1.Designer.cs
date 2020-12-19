@@ -42,6 +42,7 @@ namespace SQLCrud
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.txtStudentName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStudent)).BeginInit();
             this.SuspendLayout();
             // 
@@ -53,12 +54,12 @@ namespace SQLCrud
             this.dgvStudent.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvStudent.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
             this.dgvStudent.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvStudent.Location = new System.Drawing.Point(459, 41);
+            this.dgvStudent.Location = new System.Drawing.Point(475, 41);
             this.dgvStudent.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dgvStudent.Name = "dgvStudent";
             this.dgvStudent.ReadOnly = true;
             this.dgvStudent.RowHeadersWidth = 51;
-            this.dgvStudent.Size = new System.Drawing.Size(584, 283);
+            this.dgvStudent.Size = new System.Drawing.Size(584, 356);
             this.dgvStudent.TabIndex = 15;
             this.dgvStudent.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvStudent_CellContentClick);
             this.dgvStudent.DoubleClick += new System.EventHandler(this.DgvStudent_DoubleClick);
@@ -190,11 +191,22 @@ namespace SQLCrud
             this.label1.TabIndex = 6;
             this.label1.Text = "Student Name :";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(472, 402);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(286, 17);
+            this.label4.TabIndex = 16;
+            this.label4.Text = "Note: Double click a record you want to edit.";
+            this.label4.Click += new System.EventHandler(this.label4_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1091, 450);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.dgvStudent);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnDelete);
@@ -230,6 +242,7 @@ namespace SQLCrud
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.TextBox txtStudentName;
         private System.Windows.Forms.Label label1;
+        private Label label4;
     }
 }
 
