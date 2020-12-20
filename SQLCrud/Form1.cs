@@ -53,6 +53,7 @@ namespace SQLCrud
                         }
 
                         _isOperationUpdate = false;
+                        valid = true;
                     }
 
                     catch (MySqlException exception)
@@ -71,6 +72,7 @@ namespace SQLCrud
             else
             {
                 MessageBox.Show("Incomplete fields.");
+                valid = true;
             }
         }
 
