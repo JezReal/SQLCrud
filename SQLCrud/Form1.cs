@@ -13,8 +13,8 @@ namespace SQLCrud
         int _studentId = 0;
 
         private bool _isOperationUpdate;
-        private bool valid=true;
-        
+        private bool valid = true;
+
         public Form1()
         {
             InitializeComponent();
@@ -25,7 +25,8 @@ namespace SQLCrud
         //ADDING OF RECORDS
         private void BtnSave_Click(object sender, EventArgs e)
         {
-            if (fieldsIsValid()) {
+            if (fieldsIsValid())
+            {
                 using (MySqlConnection mySqlConnection = new MySqlConnection(ConnectionString))
                 {
                     try
@@ -52,7 +53,6 @@ namespace SQLCrud
                         }
 
                         _isOperationUpdate = false;
-
                     }
                     catch (Exception exception)
                     {
@@ -143,7 +143,9 @@ namespace SQLCrud
                     Clear();
                     GridFill();
 
-                } catch(Exception sqlException) 
+                    _isOperationUpdate = false;
+                }
+                catch (Exception sqlException)
                 {
                     MessageBox.Show(sqlException.Message);
                 } 
@@ -212,29 +214,24 @@ namespace SQLCrud
                     valid = false;
                 }
             }
-                
+
             return valid;
         }
 
         private void dgvStudent_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
         }
 
         private void label4_Click(object sender, EventArgs e)
         {
-
         }
 
         private void label5_Click(object sender, EventArgs e)
         {
-
         }
 
         private void label1_Click(object sender, EventArgs e)
         {
-
         }
-
     }
 }
