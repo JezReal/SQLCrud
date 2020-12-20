@@ -54,9 +54,17 @@ namespace SQLCrud
 
                         _isOperationUpdate = false;
                     }
+
+                    catch (MySqlException exception)
+                    {
+                        MessageBox.Show(
+                            "It seems something went wrong with the database. Please make sure it is online before doing any operation.",
+                            "Database error");
+                    }
+                    // use as last resort
                     catch (Exception exception)
                     {
-                        MessageBox.Show(exception.Message);
+                        MessageBox.Show($"Something went wrong: {exception.Message}", "Unknown error");
                     }
                 }
             }
@@ -145,9 +153,16 @@ namespace SQLCrud
 
                     _isOperationUpdate = false;
                 }
-                catch (Exception sqlException)
+                catch (MySqlException exception)
                 {
-                    MessageBox.Show(sqlException.Message);
+                    MessageBox.Show(
+                        "It seems something went wrong with the database. Please make sure it is online before doing any operation.",
+                        "Database error");
+                }
+                // use as last resort
+                catch (Exception exception)
+                {
+                    MessageBox.Show($"Something went wrong: {exception.Message}", "Unknown error");
                 } 
             }
         }
