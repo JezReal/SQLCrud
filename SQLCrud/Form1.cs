@@ -13,7 +13,7 @@ namespace SQLCrud
         int _studentId = 0;
 
         private bool _isOperationUpdate;
-        private bool valid = true;
+        private bool _valid = true;
 
         public Form1()
         {
@@ -53,7 +53,7 @@ namespace SQLCrud
                         }
 
                         _isOperationUpdate = false;
-                        valid = true;
+                        _valid = true;
                     }
 
                     catch (MySqlException exception)
@@ -72,7 +72,7 @@ namespace SQLCrud
             else
             {
                 MessageBox.Show("Incomplete fields.");
-                valid = true;
+                _valid = true;
             }
         }
 
@@ -228,11 +228,11 @@ namespace SQLCrud
             {
                 if (String.IsNullOrEmpty(field.Text))
                 {
-                    valid = false;
+                    _valid = false;
                 }
             }
 
-            return valid;
+            return _valid;
         }
 
         private void dgvStudent_CellContentClick(object sender, DataGridViewCellEventArgs e)
